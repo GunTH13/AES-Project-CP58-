@@ -1,15 +1,17 @@
 #include <stdio.h>
 #include <math.h>
 #include <string.h>
+#include <stdlib.h>
 
-int sub_byte{
-	char s_box[257], rs_box[257];
-	s_box = {{0x63, 0x7c, 0x77, 0x7b, 0xf2, 0x6b, 0x6f, 0xc5, 0x30, 0x01, 0x67, 0x2b, 0xfe, 0xd7, 0xab, 0x76},
-			{0xca, 0x82, 0xc9, 0x7d, 0xfa, 0x59, 0x47, 0xf0, 0xad, 0xd4, 0xa2, 0xaf, 0x9c, 0xa4, 0x72, 0xc0},
-			{0xb7, 0xfd, 0x93, 0x26, 0x36, 0x3f, 0xf7, 0xcc, 0x34, 0xa5, 0xe5, 0xf1, 0x71, 0xd8, 0x31, 0x15},
-			{0x04, 0xc7, 0x23, 0xc3, 0x18, 0x96, 0x05, 0x9a, 0x07, 0x12, 0x80, 0xe2, 0xeb, 0x27, 0xb2, 0x75},
+int sub_byte(char  plaintext){
+	int count=0, i, j;
+	char matrix[4][4];
+	char s_box[17][17] = {{0x63, 0x7c, 0x77, 0x7b, 0xf2, 0x6b, 0x6f, 0xc5, 0x30, 0x01, 0x67, 0x2b, 0xfe, 0xd7, 0xab, 0x76},
+			  {0xca, 0x82, 0xc9, 0x7d, 0xfa, 0x59, 0x47, 0xf0, 0xad, 0xd4, 0xa2, 0xaf, 0x9c, 0xa4, 0x72, 0xc0},
+			  {0xb7, 0xfd, 0x93, 0x26, 0x36, 0x3f, 0xf7, 0xcc, 0x34, 0xa5, 0xe5, 0xf1, 0x71, 0xd8, 0x31, 0x15},
+			  {0x04, 0xc7, 0x23, 0xc3, 0x18, 0x96, 0x05, 0x9a, 0x07, 0x12, 0x80, 0xe2, 0xeb, 0x27, 0xb2, 0x75},
   			{0x09, 0x83, 0x2c, 0x1a, 0x1b, 0x6e, 0x5a, 0xa0, 0x52, 0x3b, 0xd6, 0xb3, 0x29, 0xe3, 0x2f, 0x84},
- 	 		{0x53, 0xd1, 0x00, 0xed, 0x20, 0xfc, 0xb1, 0x5b, 0x6a, 0xcb, 0xbe, 0x39, 0x4a, 0x4c, 0x58, 0xcf},
+ 	 		  {0x53, 0xd1, 0x00, 0xed, 0x20, 0xfc, 0xb1, 0x5b, 0x6a, 0xcb, 0xbe, 0x39, 0x4a, 0x4c, 0x58, 0xcf},
   			{0xd0, 0xef, 0xaa, 0xfb, 0x43, 0x4d, 0x33, 0x85, 0x45, 0xf9, 0x02, 0x7f, 0x50, 0x3c, 0x9f, 0xa8},
   			{0x51, 0xa3, 0x40, 0x8f, 0x92, 0x9d, 0x38, 0xf5, 0xbc, 0xb6, 0xda, 0x21, 0x10, 0xff, 0xf3, 0xd2},
   			{0xcd, 0x0c, 0x13, 0xec, 0x5f, 0x97, 0x44, 0x17, 0xc4, 0xa7, 0x7e, 0x3d, 0x64, 0x5d, 0x19, 0x73},
@@ -21,7 +23,7 @@ int sub_byte{
   			{0xe1, 0xf8, 0x98, 0x11, 0x69, 0xd9, 0x8e, 0x94, 0x9b, 0x1e, 0x87, 0xe9, 0xce, 0x55, 0x28, 0xdf},
   			{0x8c, 0xa1, 0x89, 0x0d, 0xbf, 0xe6, 0x42, 0x68, 0x41, 0x99, 0x2d, 0x0f, 0xb0, 0x54, 0xbb, 0x16}
 		};
-	rs_box = {{0X52, 0x09, 0X6a, 0Xd5, 0X30, 0X36, 0Xa5, 0X38, 0Xbf, 0X40, 0Xa3, 0X9e, 0X81, 0Xf3, 0Xd7, 0Xfb},
+	char rs_box[17][17] = {{0X52, 0x09, 0X6a, 0Xd5, 0X30, 0X36, 0Xa5, 0X38, 0Xbf, 0X40, 0Xa3, 0X9e, 0X81, 0Xf3, 0Xd7, 0Xfb},
   			{0X7c, 0Xe3, 0X39, 0X82, 0X9b, 0X2f, 0Xff, 0X87, 0X34, 0X8e, 0X43, 0X44, 0Xc4, 0Xde, 0Xe9, 0Xcb},
   			{0X54, 0X7b, 0X94, 0X32, 0Xa6, 0Xc2, 0X23, 0X3d, 0Xee, 0X4c, 0X95, 0X0b, 0X42, 0Xfa, 0Xc3, 0X4e},
   			{0X08, 0X2e, 0Xa1, 0X66, 0X28, 0Xd9, 0X24, 0Xb2, 0X76, 0X5b, 0Xa2, 0X49, 0X6d, 0X8b, 0Xd1, 0X25},
@@ -36,15 +38,28 @@ int sub_byte{
   			{0X1f, 0Xdd, 0Xa8, 0X33, 0X88, 0X07, 0Xc7, 0X31, 0Xb1, 0X12, 0X10, 0X59, 0X27, 0X80, 0Xec, 0X5f},
   			{0X60, 0X51, 0X7f, 0Xa9, 0X19, 0Xb5, 0X4a, 0X0d, 0X2d, 0Xe5, 0X7a, 0X9f, 0X93, 0Xc9, 0X9c, 0Xef},
   			{0Xa0, 0Xe0, 0X3b, 0X4d, 0Xae, 0X2a, 0Xf5, 0Xb0, 0Xc8, 0Xeb, 0Xbb, 0X3c, 0X83, 0X53, 0X99, 0X61},
-  			{0X17, 0X2b, 0X04, 0X7e, 0Xba, 0X77, 0Xd6, 0X26, 0Xe1, 0X69, 0X14, 0X63, 0X55, 0X21, 0X0c, 0X7d}}
-  		};
-	for(i=0; i<10; i++){
-		for(j=0; j<10; j++){
-			matrix[j][i] == s_box[matrix[0]][matrix[1]];
+  			{0X17, 0X2b, 0X04, 0X7e, 0Xba, 0X77, 0Xd6, 0X26, 0Xe1, 0X69, 0X14, 0X63, 0X55, 0X21, 0X0c, 0X7d}};
+	for(i=0; i<4; i++){
+		for(j=0; j<4; j++){
+			plaintext[count][0] = to_num(plaintext[count][0]);
+			plaintext[count][1] = to_num(plaintext[count][1]);
+			matrix[j][i] = s_box[plaintext[count][0]][plaintext[count][1]];
+			count++;
 		}
 	}
+	return matrix;
 }
 
+int to_num(char text[]){
+	if(text == 'A'){return 10;}
+	else if(text == 'B'){return 11;}
+	else if(text == 'C'){return 12;}
+	else if(text == 'D'){return 13;}
+	else if(text == 'E'){return 14;}
+	else if(text == 'F'){return 15;}
+	else return (int) text;
+}
+/*
 int make_matrix(count, plaintext) {
 	int i, num=0, j;
 	for(i=0; i<4; i++){
@@ -54,51 +69,24 @@ int make_matrix(count, plaintext) {
 		}
 	}
 }
-
-int dec_to_hex(char plaintext){
-	char plaintext[10000], answer[1000], matrix[5][5][3];
-	int i=0, ans, num, j, letter, lenth, count, rounds=0, column=0, digit=0, k;
-	for(j=0; j<strlen(plaintext);j++){
-		i = 0;
-		count = 0;
-		letter = (int)plaintext[j];
-		while(letter != 0){
-			ans = letter%16;
-			letter = letter/16;
-			if(ans==10){
-				answer[i] = 'A';
-			}
-			else if(ans==11){
-				answer[i] = 'B';
-			}
-			else if(ans==12){
-				answer[i] = 'C';
-			}
-			else if(ans==13){
-				answer[i] = 'D';
-			}
-			else if(ans==14){
-				answer[i] = 'E';
-			}
-			else if(ans==15){
-				answer[i] = 'F';
-			}
-			else{
-				answer[i] = ans;
-			}
-			i++;
-			count++;
-		}
-}
-
-
-
-int main() {
-	char plaintext, key, cipher, matrix[17][3];
+*/
+int main(){
+	char key[17], cipher[99999], matrix[5][5];
 	int rounds, i, j, count;
+	char plaintext[16] = {'\0','\0','\0','\0','\0','\0','\0','\0','\0','\0','\0','\0','\0','\0','\0','\0'};
+	char b[3], a[16];
 	scanf(" %[^\n]s\n%s", plaintext, key);
 	rounds = ceil(strlen(plaintext)/16);
-	for(count=0; count<rounds; count++){
-
+	for(i=0; i<16; i++){
+		sprintf(a, "%x", plaintext[i]); /* keep char ascii to hex base */
+		sprintf(b, "%s", a); /* change hex base to string */
+		plaintext[i] = b;
+	matrix = sub_byte(plaintext);
+	for(i=0; i<4; i++){
+		for(j=0; j<4; j++){
+			printf("%s ", matrix[i][j]);
+		}
+		printf("\n");
+	}
 	}
 }

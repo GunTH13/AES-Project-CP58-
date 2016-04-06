@@ -7,6 +7,7 @@
 
 int matrix[4][4];
 int secondmatrix[4][4];//copy the first matrix
+int mixcolumnmatrix[4][4];//to recieve ans from mixcolumn function
 
 int tonum(char text);
 int sub_byte(char index[][three]);
@@ -139,10 +140,14 @@ int mixcolumn(){
 	for(i=0; i<4; i++){
 		for(j=0; j<4; j++){
 			printf("%d %d %d %d\n", multimatrix(matrix[0][i], tablemultimatrix[j][0]), multimatrix(matrix[1][i], tablemultimatrix[j][1]), multimatrix(matrix[2][i], tablemultimatrix[j][2]), multimatrix(matrix[3][i], tablemultimatrix[j][3]));
-			matrix[j][i] = multimatrix(matrix[0][i], tablemultimatrix[j][0])^multimatrix(matrix[1][i], tablemultimatrix[j][1])^multimatrix(matrix[2][i], tablemultimatrix[j][2])^multimatrix(matrix[3][i], tablemultimatrix[j][3]);
+			mixcolumnmatrix[j][i] = multimatrix(matrix[0][i], tablemultimatrix[j][0])^multimatrix(matrix[1][i], tablemultimatrix[j][1])^multimatrix(matrix[2][i], tablemultimatrix[j][2])^multimatrix(matrix[3][i], tablemultimatrix[j][3]);
 		}
 	}
-
+	for(i=0; i<4; i++){
+		for(j=0; j<4; j++){
+			matrix[j][i] = mixcolumnmatrix[j][i];
+		}
+	}
 }
 
 int multimatrix(int numbermatrix, int table){

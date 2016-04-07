@@ -7,26 +7,44 @@
 
 int matrix[4][4];
 int secondmatrix[4][4];//copy the first matrix
-int mixcolumnmatrix[4][4];//to recieve ans from mixcolumn function
+int matrix_key[4][4];
+int secondmatrix_key[4][4];//copy the first matrix_key
 
 int tonum(char text);
 int sub_byte(char index[][three]);
 int shiftrow();
-int mixcolumn();
+// abcdefghijklmnop
+
 
 int main(){
-	char key[17], cipher[9999];
+	char cipher[9999];
 	int rounds, i, j, count;
 	char plaintext[16] = {'\0','\0','\0','\0','\0','\0','\0','\0','\0','\0','\0','\0','\0','\0','\0','\0'};
+	char key[16] = {'\0','\0','\0','\0','\0','\0','\0','\0','\0','\0','\0','\0','\0','\0','\0','\0'};
 	char index[16][3];
-	char b[2], a[2];
-	scanf(" %[^\n]s\n%s", plaintext, key);
+	char index_key[16][3];
+	char b[2], a[2];   // a = plaintext   b = Key
+	scanf(" %[^\n]s", plaintext);
+	scanf(" %[^\n]s", key);
+//---------------------------------------
+	// change number binary of KEY to HEX.
 	rounds = ceil(strlen(plaintext)/16);
 	for(i=0; i<16; i++){
 		sprintf(a, "%x", plaintext[i]); /* keep char ascii to hex base */
 		strcpy(index[i], a);
 	}
-	sub_byte(index);
+//---------------------------------------
+	// change number binary of KEY to HEX.
+	rounds = ceil(strlen(key)/16);
+	for(i=0; i<16; i++){
+		sprintf(b, "%x", key[i]); /* keep char ascii to hex base */
+		strcpy(index_key[i], b);
+    printf("%x\n", key[i]);
+  }
+
+//---------------------------------------
+	sub_byte(index);	//Sent to funtion sub_byte
+//---------------------------------------
 	for(i=0; i<4; i++){
 		for(j=0; j<4; j++){
 			printf("%x ", matrix[i][j]);
@@ -34,26 +52,19 @@ int main(){
 		printf("\n");
 	}
 	printf("-------------------------------------------\n");
-	shiftrow();
-	printf("shiftrow value:\n");
+//---------------------------------------
+	shiftrow();	//Sent to funtion shiftrow
+//---------------------------------------
 	for(i=0; i<4; i++){
 		for(j=0; j<4; j++){
 			printf("%x ", matrix[i][j]);
 		}
 		printf("\n");
 	}
-	printf("-------------------------------------------\n");
-	mixcolumn();
-	printf("mixcolumn value:\n");
-	for(i=0; i<4; i++){
-		for(j=0; j<4; j++){
-			printf("%x ", matrix[i][j]);
-		}
-		printf("\n");
-	}
+}
 
-}	
 
+//---------------------------------------sub_byte-------------------------------
 int sub_byte(char index[][three]){
 	int count=0, i, j;
 	int s_box[16][16] = {
@@ -91,8 +102,9 @@ int sub_byte(char index[][three]){
   			{0Xa0, 0Xe0, 0X3b, 0X4d, 0Xae, 0X2a, 0Xf5, 0Xb0, 0Xc8, 0Xeb, 0Xbb, 0X3c, 0X83, 0X53, 0X99, 0X61},
   			{0X17, 0X2b, 0X04, 0X7e, 0Xba, 0X77, 0Xd6, 0X26, 0Xe1, 0X69, 0X14, 0X63, 0X55, 0X21, 0X0c, 0X7d}};
 
-  	int a, b;
-  	printf("subbyte value:\n");
+  int a, b;
+	// a is ...
+	// b is ..
 	for(i=0; i<4; i++){
 		for(j=0; j<4; j++){
 			a = tonum(index[count][0]);
@@ -105,6 +117,9 @@ int sub_byte(char index[][three]){
 	}
 }
 
+
+//------------------------------------------tonum-------------------------------
+// recive text of index(plaintext) change to (int)num sent to sub_byte.
 int tonum(char text){
 	if(text == 'a'){return 10;}
 	else if(text == 'b'){return 11;}
@@ -116,78 +131,24 @@ int tonum(char text){
 	else return (int)(text - 48);
 }
 
+
+//------------------------------------------shiftrow----------------------------
+//shift matrix Row
 int shiftrow(){
-	matrix[1][0] = secondmatrix[1][1];
-	matrix[1][1] = secondmatrix[1][2];
-	matrix[1][2] = secondmatrix[1][3];
-	matrix[1][3] = secondmatrix[1][0];
+	matrix[1][0] = secondmatrix[1][3];
+	matrix[1][1] = secondmatrix[1][0];
+	matrix[1][2] = secondmatrix[1][1];
+	matrix[1][3] = secondmatrix[1][2];
 
 	matrix[2][0] = secondmatrix[2][2];
 	matrix[2][1] = secondmatrix[2][3];
 	matrix[2][2] = secondmatrix[2][0];
 	matrix[2][3] = secondmatrix[2][1];
 
-	matrix[3][0] = secondmatrix[3][3];
-	matrix[3][1] = secondmatrix[3][0];
-	matrix[3][2] = secondmatrix[3][1];
-	matrix[3][3] = secondmatrix[3][2];
-
-}
-
-int mixcolumn(){
-	int i, j;
-	int tablemultimatrix[4][4] = {{2, 3, 1, 1}, {1, 2, 3, 1}, {1, 1, 2, 3}, {3, 1, 1, 2}};
-	for(i=0; i<4; i++){
-		for(j=0; j<4; j++){
-			printf("%d %d %d %d\n", multimatrix(matrix[0][i], tablemultimatrix[j][0]), multimatrix(matrix[1][i], tablemultimatrix[j][1]), multimatrix(matrix[2][i], tablemultimatrix[j][2]), multimatrix(matrix[3][i], tablemultimatrix[j][3]));
-			mixcolumnmatrix[j][i] = multimatrix(matrix[0][i], tablemultimatrix[j][0])^multimatrix(matrix[1][i], tablemultimatrix[j][1])^multimatrix(matrix[2][i], tablemultimatrix[j][2])^multimatrix(matrix[3][i], tablemultimatrix[j][3]);
-		}
-	}
-	for(i=0; i<4; i++){
-		for(j=0; j<4; j++){
-			matrix[j][i] = mixcolumnmatrix[j][i];
-		}
-	}
-}
-
-int multimatrix(int numbermatrix, int table){
-	if(table==1){return numbermatrix;}
-	else if(table==2){
-		return numtobi(numbermatrix);
-	}
-	else if(table==3){}
-		return (numtobi(numbermatrix)^numbermatrix);
+	matrix[3][0] = secondmatrix[3][1];
+	matrix[3][1] = secondmatrix[3][2];
+	matrix[3][2] = secondmatrix[3][3];
+	matrix[3][3] = secondmatrix[3][0];
 
 
-}
-
-int numtobi(int number){
-	int bi1[1000], count=0, i=0, bi2[1000], roun=0, ans=0, two=1;
-	for(i=0; i<8; i++){
-		if(number!=0){
-			bi1[i] = number%2;
-			number = number/2;
-		}
-		else{
-			bi1[i] = 0;
-		}
-	}
-	count = 8;
-	for(i=count-2; i>=0; i--){
-		bi2[roun] = bi1[i];
-		roun++;
-	}
-	bi2[7] = 0;
-	for(i=7; i>=0; i--){
-		if(bi2[i]==1 && i==7){
-			ans += (bi2[i]*(two));
-		}
-		else if(bi2[i]==1 && i<7){
-			ans += (bi2[i]*(two));
-		}
-		two *= 2;
-	}
-	printf("%d\n", ans);
-	ans = ans^27;
-	return ans;
 }

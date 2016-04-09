@@ -2,7 +2,7 @@
 #include <math.h>
 #include <string.h>
 #include <stdlib.h>
-
+// abcdefghijklmnop
 #define three 3
 
 int matrix[4][4];
@@ -29,30 +29,30 @@ int main(){
 	sub_byte(index);
 	for(i=0; i<4; i++){
 		for(j=0; j<4; j++){
-			printf("%x ", matrix[i][j]);
+			//printf("%x ", matrix[i][j]);
 		}
-		printf("\n");
+		//printf("\n");
 	}
-	printf("-------------------------------------------\n");
+//	printf("-------------------------------------------\n");
 	shiftrow();
-	printf("shiftrow value:\n");
+//	printf("shiftrow value:\n");
 	for(i=0; i<4; i++){
 		for(j=0; j<4; j++){
-			printf("%x ", matrix[i][j]);
+			//printf("%x ", matrix[i][j]);
 		}
-		printf("\n");
+	//	printf("\n");
 	}
-	printf("-------------------------------------------\n");
+	//printf("-------------------------------------------\n");
 	mixcolumn();
-	printf("mixcolumn value:\n");
+//	printf("mixcolumn value:\n");
 	for(i=0; i<4; i++){
 		for(j=0; j<4; j++){
 			printf("%x ", matrix[i][j]);
 		}
-		printf("\n");
+	//	printf("\n");
 	}
 
-}	
+}
 
 int sub_byte(char index[][three]){
 	int count=0, i, j;
@@ -92,12 +92,12 @@ int sub_byte(char index[][three]){
   			{0X17, 0X2b, 0X04, 0X7e, 0Xba, 0X77, 0Xd6, 0X26, 0Xe1, 0X69, 0X14, 0X63, 0X55, 0X21, 0X0c, 0X7d}};
 
   	int a, b;
-  	printf("subbyte value:\n");
+  //	printf("subbyte value:\n");
 	for(i=0; i<4; i++){
 		for(j=0; j<4; j++){
 			a = tonum(index[count][0]);
 			b = tonum(index[count][1]);
-			printf("%d %d %d\n", a, b, s_box[a][b]);
+			//printf("%d %d %d\n", a, b, s_box[a][b]);
 			matrix[j][i] = s_box[a][b];
 			secondmatrix[j][i] = s_box[a][b];
 			count++;
@@ -139,7 +139,7 @@ int mixcolumn(){
 	int tablemultimatrix[4][4] = {{2, 3, 1, 1}, {1, 2, 3, 1}, {1, 1, 2, 3}, {3, 1, 1, 2}};
 	for(i=0; i<4; i++){
 		for(j=0; j<4; j++){
-			printf("%d %d %d %d\n", multimatrix(matrix[0][i], tablemultimatrix[j][0]), multimatrix(matrix[1][i], tablemultimatrix[j][1]), multimatrix(matrix[2][i], tablemultimatrix[j][2]), multimatrix(matrix[3][i], tablemultimatrix[j][3]));
+		//	printf("%d %d %d %d\n", multimatrix(matrix[0][i], tablemultimatrix[j][0]), multimatrix(matrix[1][i], tablemultimatrix[j][1]), multimatrix(matrix[2][i], tablemultimatrix[j][2]), multimatrix(matrix[3][i], tablemultimatrix[j][3]));
 			mixcolumnmatrix[j][i] = multimatrix(matrix[0][i], tablemultimatrix[j][0])^multimatrix(matrix[1][i], tablemultimatrix[j][1])^multimatrix(matrix[2][i], tablemultimatrix[j][2])^multimatrix(matrix[3][i], tablemultimatrix[j][3]);
 		}
 	}
@@ -187,7 +187,7 @@ int numtobi(int number){
 		}
 		two *= 2;
 	}
-	printf("%d\n", ans);
+	//printf("%d\n", ans);
 	ans = ans^27;
 	return ans;
 }

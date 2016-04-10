@@ -7,44 +7,24 @@
 
 int matrix[4][4];
 int secondmatrix[4][4];//copy the first matrix
-int matrix_key[4][4];
-int secondmatrix_key[4][4];//copy the first matrix_key
 
 int tonum(char text);
 int sub_byte(char index[][three]);
 int shiftrow();
-// abcdefghijklmnop
-
 
 int main(){
-	char cipher[9999];
+	char key[17], cipher[9999];
 	int rounds, i, j, count;
 	char plaintext[16] = {'\0','\0','\0','\0','\0','\0','\0','\0','\0','\0','\0','\0','\0','\0','\0','\0'};
-	char key[16] = {'\0','\0','\0','\0','\0','\0','\0','\0','\0','\0','\0','\0','\0','\0','\0','\0'};
 	char index[16][3];
-	char index_key[16][3];
-	char b[2], a[2];   // a = plaintext   b = Key
-	scanf(" %[^\n]s", plaintext);
-	scanf(" %[^\n]s", key);
-//---------------------------------------
-	// change number binary of KEY to HEX.
+	char b[2], a[2];
+	scanf(" %[^\n]s\n%s", plaintext, key);
 	rounds = ceil(strlen(plaintext)/16);
 	for(i=0; i<16; i++){
 		sprintf(a, "%x", plaintext[i]); /* keep char ascii to hex base */
 		strcpy(index[i], a);
 	}
-//---------------------------------------
-	// change number binary of KEY to HEX.
-	rounds = ceil(strlen(key)/16);
-	for(i=0; i<16; i++){
-		sprintf(b, "%x", key[i]); /* keep char ascii to hex base */
-		strcpy(index_key[i], b);
-    printf("%x\n", key[i]);
-  }
-
-//---------------------------------------
-	sub_byte(index);	//Sent to funtion sub_byte
-//---------------------------------------
+	sub_byte(index);
 	for(i=0; i<4; i++){
 		for(j=0; j<4; j++){
 			printf("%x ", matrix[i][j]);
@@ -52,19 +32,15 @@ int main(){
 		printf("\n");
 	}
 	printf("-------------------------------------------\n");
-//---------------------------------------
-	shiftrow();	//Sent to funtion shiftrow
-//---------------------------------------
+	shiftrow();
 	for(i=0; i<4; i++){
 		for(j=0; j<4; j++){
 			printf("%x ", matrix[i][j]);
 		}
 		printf("\n");
 	}
-}
+}	
 
-
-//---------------------------------------sub_byte-------------------------------
 int sub_byte(char index[][three]){
 	int count=0, i, j;
 	int s_box[16][16] = {
@@ -102,9 +78,8 @@ int sub_byte(char index[][three]){
   			{0Xa0, 0Xe0, 0X3b, 0X4d, 0Xae, 0X2a, 0Xf5, 0Xb0, 0Xc8, 0Xeb, 0Xbb, 0X3c, 0X83, 0X53, 0X99, 0X61},
   			{0X17, 0X2b, 0X04, 0X7e, 0Xba, 0X77, 0Xd6, 0X26, 0Xe1, 0X69, 0X14, 0X63, 0X55, 0X21, 0X0c, 0X7d}};
 
-  int a, b;
-	// a is ...
-	// b is ..
+  	int a, b;
+
 	for(i=0; i<4; i++){
 		for(j=0; j<4; j++){
 			a = tonum(index[count][0]);
@@ -117,9 +92,6 @@ int sub_byte(char index[][three]){
 	}
 }
 
-
-//------------------------------------------tonum-------------------------------
-// recive text of index(plaintext) change to (int)num sent to sub_byte.
 int tonum(char text){
 	if(text == 'a'){return 10;}
 	else if(text == 'b'){return 11;}
@@ -131,9 +103,6 @@ int tonum(char text){
 	else return (int)(text - 48);
 }
 
-
-//------------------------------------------shiftrow----------------------------
-//shift matrix Row
 int shiftrow(){
 	matrix[1][0] = secondmatrix[1][3];
 	matrix[1][1] = secondmatrix[1][0];
@@ -152,3 +121,4 @@ int shiftrow(){
 
 
 }
+
